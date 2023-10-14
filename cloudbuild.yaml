@@ -1,0 +1,19 @@
+steps:
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us-east1-docker.pkg.dev/nextjs-docker-gcr2/nextjs-docker-gcr2-docker-repo:tag1', '.']
+
+# push image to the artifacts registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push','us-east1-docker.pkg.dev/nextjs-docker-gcr2/nextjs-docker-gcr2-docker-repo:tag1']
+
+# deploy container image to Google Cloud run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run','deploy','nextjs-docker-gcr2-image', '--image', 'us-east1-docker.pkg.dev/nextjs-docker-gcr2/nextjs-docker-gcr2-docker-repo:tag1','--region','us-central1']
+
+images:
+- 'us-east1-docker.pkg.dev/nextjs-docker-gcr2/nextjs-docker-gcr2-docker-repo:tag1'
+
+
+
